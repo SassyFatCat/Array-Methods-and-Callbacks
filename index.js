@@ -26,12 +26,10 @@ getFinals(fifaData)
 /* Task 3: Implement a higher-order function called `getYears` that accepts the callback function `getFinals`, and returns an array called `years` containing all of the years in the dataset */
 
 function getYears(callback) {
-let years = [];
-    callback.map(x => years.push(x["Year"]));
-return years;
+    return callback.map(x => x["Year"]);
 };
 
-getYears(getFinals(fifaData));
+console.log(getYears(getFinals(fifaData)));
 
 /* Task 5: Implement a higher-order function called `getWinners`, that accepts the callback function `getFinals()` and determine the winner (home or away) of each `finals` game. Return the name of all winning countries in an array called `winners` */ 
 
@@ -75,13 +73,13 @@ getAverageGoals(fifaData);
 Hint: Investigate your data to find "team initials"!
 Hint: use `.reduce` */
 
-function getCountryWins(/* code here */) {
-
-    /* code here */
-
+function getCountryWins(data, teamInitials) {
+let number = data.map(obj => obj["Home Team Goals"] > obj["Away Team Goals"] ? obj["Home Team Initials"] : obj["Away Team Initials"])
+                 .filter(x => x === teamInitials).length;
+console.log(`${teamInitials} has had ${number} FIFA wins!`)
 };
 
-getCountryWins();
+getCountryWins(fifaData, "USA");
 
 
 /* Stretch 3: Write a function called getGoals() that accepts a parameter `data` and returns the team with the most goals score per appearance (average goals for) in the World Cup finals */
