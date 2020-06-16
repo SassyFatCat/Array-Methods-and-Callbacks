@@ -22,7 +22,7 @@ console.log('its working');
 function getFinals(data) {
     return data.filter(x => x["Stage"] === "Final")
 };
-
+getFinals(fifaData)
 /* Task 3: Implement a higher-order function called `getYears` that accepts the callback function `getFinals`, and returns an array called `years` containing all of the years in the dataset */
 
 function getYears(callback) {
