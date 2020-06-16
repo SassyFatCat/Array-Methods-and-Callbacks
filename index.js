@@ -11,7 +11,7 @@ console.log('its working');
 (c) Home Team goals for 2014 world cup final
 (d) Away Team goals for 2014 world cup final
 (e) Winner of 2014 world cup final */
-
+/*(a)*/ console.log(fifaData.filter(obj => obj["Year"] === 2014 & obj["Stage"] === "Final")[0]["Home Team Initials"])
 
 /* Task 2: Create a function called  getFinals that takes `data` as an argument and returns an array of objects with only finals data */
 
