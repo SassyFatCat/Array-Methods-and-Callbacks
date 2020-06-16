@@ -89,14 +89,25 @@ let finals = data.filter(x => x["Stage"] === "Final");
 let finalsTeams = finals.map(x => x["Home Team Initials"]).concat(finals.map(x => x["Away Team Initials"]));
 let oneOfEach = [];
 finalsTeams.forEach(x => oneOfEach.indexOf(x) === -1 ? oneOfEach.push(x) : null);
-
-// oneOfEach.forEach(function(y) {
-//     for (let i = 0; i < finals.length; i++) {
-//         if
-//     }
-// })
-// };
-
+let goalsPerTeam = [];
+oneOfEach.forEach(function(y) {
+    let tempArray = [];
+    for (let i = 0; i < finals.length; i++) {
+        if (finals[i]["Home Team Initials"] == y) {
+            tempArray.push(finals[i]["Home Team Goals"])
+        }
+        else if (finals[i]["Away Team Initials"] == y) {
+            tempArray.push(finals[i]["Away Team Goals"])
+        }
+    }
+    goalsPerTeam.push(tempArray.reduce((a, b) => a + b))
+})
+let goalsPerCopy = goalsPerTeam.slice();
+let biggestGoal = goalsPerCopy.sort((a, b) => b - a);
+let winnerIndex = goalsPerTeam.indexOf(biggestGoal[0]);
+let winnerTeam = finalsTeams.filter(x => x === oneOfEach[winnerIndex]);
+console.log(`${oneOfEach[winnerIndex]} scored the most goals in FIFA Final games with a total of ${goalsPerTeam[winnerIndex]} goals, and an average of ${Math.round((goalsPerTeam[winnerIndex]) / winnerTeam.length)} goals per game`)
+}
 getGoals(fifaData);
 
 
