@@ -102,8 +102,7 @@ oneOfEach.forEach(function(y) {
     }
     goalsPerTeam.push(tempArray.reduce((a, b) => a + b))
 })
-let goalsPerCopy = goalsPerTeam.slice();
-let biggestGoal = goalsPerCopy.sort((a, b) => b - a);
+let biggestGoal = goalsPerTeam.slice().sort((a, b) => b - a);
 let winnerIndex = goalsPerTeam.indexOf(biggestGoal[0]);
 let winnerTeam = finalsTeams.filter(x => x === oneOfEach[winnerIndex]);
 console.log(`${oneOfEach[winnerIndex]} scored the most goals in FIFA Final games with a total of ${goalsPerTeam[winnerIndex]} goals, and an average of ${Math.round((goalsPerTeam[winnerIndex]) / winnerTeam.length)} goals per game`)
