@@ -83,29 +83,42 @@ getCountryWins(fifaData, "USA");
 
 
 /* Stretch 3: Write a function called getGoals() that accepts a parameter `data` and returns the team with the most goals score per appearance (average goals for) in the World Cup finals */
-
+// I did receive help on this, so I can't take all the credit
 function getGoals(data) {
-let finals = data.filter(x => x["Stage"] === "Final");
-let finalsTeams = finals.map(x => x["Home Team Initials"]).concat(finals.map(x => x["Away Team Initials"]));
-let oneOfEach = [];
-finalsTeams.forEach(x => oneOfEach.indexOf(x) === -1 ? oneOfEach.push(x) : null);
-let goalsPerTeam = [];
-oneOfEach.forEach(function(y) {
-    let tempArray = [];
-    for (let i = 0; i < finals.length; i++) {
-        if (finals[i]["Home Team Initials"] == y) {
-            tempArray.push(finals[i]["Home Team Goals"])
-        }
-        else if (finals[i]["Away Team Initials"] == y) {
-            tempArray.push(finals[i]["Away Team Goals"])
+    const finals = getFinals(data);
+    const obj = {};
+    function addToObj(property) {
+        if (!obj.hasOwnProperty(property)) {
+            obj[property] = {goals: 0, games: 0};
         }
     }
-    goalsPerTeam.push(tempArray.reduce((a, b) => a + b))
-})
-let biggestGoal = goalsPerTeam.slice().sort((a, b) => b - a);
-let winnerIndex = goalsPerTeam.indexOf(biggestGoal[0]);
-let winnerTeam = finalsTeams.filter(x => x === oneOfEach[winnerIndex]);
-console.log(`${oneOfEach[winnerIndex]} scored the most goals in FIFA Final games with a total of ${goalsPerTeam[winnerIndex]} goals, and an average of ${Math.round((goalsPerTeam[winnerIndex]) / winnerTeam.length)} goals per game`)
+    finals.forEach(function(element) {
+        addToObj(element["Home Team Name"]);
+        addToObj(element["Away Team Name"]);
+    });
+    
+    function updateStats(element) {
+        obj[element["Home Team Name"]].goals += element["Home Team Goals"];
+        obj[element["Away Team Name"]].goals += element["Away Team Goals"];
+        obj[element["Home Team Name"]].games += 1;
+        obj[element["Away Team Name"]].games += 1;
+    };
+    finals.forEach(element => updateStats(element));
+
+    Object.keys(obj).forEach(function(key) {
+        obj[key].average = obj[key].goals / obj[key].games
+    });
+    
+    const highestAverage = Object.keys(obj).reduce(function(team1, team2) {
+        if (obj[team1].average > obj[team2].average) {
+            return team1;
+        }
+        else {
+            return team2;
+        }
+    });
+    console.log(obj)
+    console.log(highestAverage)
 }
 getGoals(fifaData);
 
