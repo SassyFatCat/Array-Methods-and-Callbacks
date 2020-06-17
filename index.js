@@ -125,12 +125,53 @@ getGoals(fifaData);
 
 /* Stretch 4: Write a function called badDefense() that accepts a parameter `data` and calculates the team with the most goals scored against them per appearance (average goals against) in the World Cup finals */
 
-function badDefense(/* code here */) {
+function badDefense(data) {
+// GET ALL THE FINAL GAMES
+const finals = getFinals(data);
 
-    /* code here */
+// DECLARE AN OBJECT WHICH WILL HOLD DATA ABOUT TEAMS
+const obj = {};
 
+// CREATE A FUNCTION THAT WILL ADD EACH TEAM AS A KEY
+function getTeams(element) {
+    if (!obj.hasOwnProperty(element)) {
+        obj[element] = {goalsagainst: 0, games: 0, average: 0}
+    }
 };
 
-badDefense();
+// USE .forEach TO ADD ALL THE TEAMS INTO THE OBJECT USING getTeams
+finals.forEach(function(element) {
+    getTeams(element["Home Team Name"]);
+    getTeams(element["Away Team Name"]);
+});
+
+// USE .forEach TO UPDATE OUR TEAMS GAMES AND GOALS AGAINST THEM BASED ON THE GAME STATS
+finals.forEach(function(element) {
+    obj[element["Home Team Name"]].goalsagainst += element["Away Team Goals"];
+    obj[element["Away Team Name"]].goalsagainst += element["Home Team Goals"];
+    obj[element["Home Team Name"]].games += 1;
+    obj[element["Away Team Name"]].games += 1;
+});
+
+// USE THE UPDATED DATA TO CALCULATE THE AVERAGE GOALS SCORED AGAINST EACH TEAM
+Object.keys(obj).forEach(function(key) {
+    obj[key].average = obj[key].goalsagainst / obj[key].games
+});
+
+// USE .REDUCE() TO REDUCE THE AVERAGES TO THE GREATEST NUMBER AND RETURN THE KEY (TEAM NAME) OF THE RESULTS
+const greatestAverageScoredAgainst = Object.keys(obj).reduce(function(objA, objB) {
+    if (obj[objA].average > obj[objB].average) {
+        return objA
+    }
+    else {
+        return objB
+    }
+});
+
+// RETURN THE VARIABLE WHICH HOLDS THE NAME OF THE TEAM WITH THE HIGHEST AVERAGE GOALS SCORED AGAINST THEM
+return greatestAverageScoredAgainst
+};
+
+badDefense(fifaData);
 
 /* If you still have time, use the space below to work on any stretch goals of your chosing as listed in the README file. */
